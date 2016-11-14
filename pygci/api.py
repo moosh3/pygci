@@ -28,6 +28,24 @@ class GCivicInfo(EndpointsMixin, object):
                  api_version='v2', client_args=None, auth_enpoint='authenticate'):
         """Creates a new GCivicInfo instance, with option parameters for
         authentication and so forth
+
+        :param app_key: (optional) Your applications key
+        :param app_secret: (optional) Your applications secret key
+        :param oauth_token: (optional) When using **OAuth 1**, combined with
+        oauth_token_secret to make authenticated calls
+        :param oauth_token_secret: (optional) When using **OAuth 1** combined
+        with oauth_token to make authenticated calls
+        :param access_token: (optional) When using **OAuth 2**, provide a
+        valid access token if you have one
+        :param token_type: (optional) When using **OAuth 2**, provide your
+        token type. Default: bearer
+        :param oauth_version: (optional) Choose which OAuth version to use.
+        Default: 1
+        :param api_version: (optional) Choose which GCI API version to
+        use. Default: v2
+
+        :param client_args:
+        :param auth_endpoint:
         """
         self.api_version = api_version
         self.api_url = 'https://www.googleapis.com/civicinfo/%s/%s'
@@ -121,7 +139,12 @@ class GCivicInfo(EndpointsMixin, object):
     def construct_api_url(api_url, **params):
         """Creates GCI API url, encoded with parameters
 
-        Usage:
+        :param api_url: URL of the GCI API endpoint you are attempting
+        to construct
+        :param \*\*params: Parameters accepted by GCI for the specific endpoint
+        you are requesting
+
+        Usage::
 
             >>> from pygci import GCivicInfo
             >>> CivicInfo = GCivicInfo()
@@ -130,5 +153,28 @@ class GCivicInfo(EndpointsMixin, object):
             >>> constructed_url = CivicInfo.construct_api_url(api_url, version, params)
             >>> print(constructed_url)
             https://www.googleapis.com/civicinfo/v2/elections?key=<API_KEY>
+
         """
-        
+        querystring = []
+        params, _ = _transparent_params(params or {})
+        params = requests.utils.to_key_val_list(params)
+        for (k, v) in params:
+            querystring.append(
+                '%s=%s' % (pygci.encode(k), quote_plus(pygci.encode(v)))
+            )
+        return '%s?%s' % (api_url, '&'.join(querystring))
+
+    @staticmethod
+    def unicode2utf8(text):
+        try:
+            if is_py2 and isinstance(text, str):
+                text = text.encode('utf-8')
+        except:
+            pass
+        return text
+
+    @staticmethod
+    def encode(text):
+        if is_py2 and isinstance(text, (str)):
+            return pygci.unicode2utf8(text)
+        return str(text)
