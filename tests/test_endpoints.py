@@ -26,15 +26,15 @@ class GCivicInfoEndpointsTestCase(unittest.TestCase):
         """Test return infomation relevant to a voter
         based on the voter's registered address
         """
-        self.api.get_voter_info_query()
+        self.api.get_voter_info_query(address='Illinois State Capitol, Springfield, IL 62756')
 
     # Representatives
     def test_get_representatives_by_address(self):
-        pass
+        self.api.get_representative_by_address()
 
     def test_get_representatives_by_division(self):
-        pass
+        self.api.get_representative_by_division()
 
     # Divisions
     def test_get_division(self):
-        pass
+        self.api.get_division()

@@ -26,23 +26,22 @@ class EndpointsMixin(object):
         """Looks up information relevant to a voter
         based on the voter's registered address
 
-        params::
-            - address (string) [required]
-            - electionId (long)
-            - officialOnly (boolean), default=False
+        :param address: (string) [required]
+        :param electionId: (optional) type=long
+        :param officialOnly: (optional) type=boolean, default=False
         """
         if 'address' not in params:
             raise GCivicInfoError('This method requires a voters address')
         else:
             return self.get('/voterinfo', params=params)
+
     # Representatives
     def get_representative_by_address(self, **params):
         """Looks up political geography and representative
         information for a single address
 
-        params::
-            - address (string)
-            - includeOffices (boolean), default=True
+        :param address: (optional) type=string
+        :param includeOffices: (optional) type=boolean, default=True
         """
         return self.get('/representatives', params=params)
 
@@ -50,8 +49,7 @@ class EndpointsMixin(object):
         """Looks up representative information for a single
         geographic division
 
-        params::
-            - ocdId (string) [required]
+        :param ocdId: type=string
         """
         return self.get('/representatives/%s' % ocdId, params=params)
 
@@ -60,7 +58,6 @@ class EndpointsMixin(object):
         """Searches for political divisions by their
         natural name or OCD ID
 
-        params::
-            - query (string)
+        :param query: type=string
         """
         return self.get('/divisions', params=params)

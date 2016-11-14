@@ -127,28 +127,14 @@ class GCivicInfo(EndpointsMixin, object):
 
     """Authentication setup goes here"""
 
-    def encode_address_url(api_url, **params):
-
 
     @staticmethod
     def construct_api_url(api_url, **params):
         """Creates GCI API url, encoded with parameters
 
-        :param api_url: URL of the GCI API endpoint you are attempting
-        to construct
+        :param api_url: URL of the GCI API endpoint you are attempting to construct
         :param \*\*params: Parameters accepted by GCI for the specific endpoint
         you are requesting
-
-        Usage::
-
-            >>> from pygci import GCivicInfo
-            >>> CivicInfo = GCivicInfo()
-
-            >>> api_url = 'https://www.googleapis.com/civicinfo/v2/elections'
-            >>> constructed_url = CivicInfo.construct_api_url(api_url, version, params)
-            >>> print(constructed_url)
-            https://www.googleapis.com/civicinfo/v2/elections?key=<API_KEY>
-
         """
         querystring = []
         params, _ = _transparent_params(params or {})
