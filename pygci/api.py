@@ -11,7 +11,8 @@ import re
 
 import requests
 from requests.auth import HTTPBasicAuth
-from request_oauthlib import OAuth1, OAuth2
+
+from oauth2client import client
 
 from . import __version__
 from .endpoints import EndpointsMixin
@@ -24,7 +25,7 @@ from .helpers import _transparent_params
 
 class GCivicInfo(EndpointsMixin, object):
     def __init__(self, app_key=None, app_secret=None, oauth_token=None,
-                 oauth_token_secret=None, oauth_version=1, api_key=None,
+                 oauth_token_secret=None, oauth_version=2, api_key=None,
                  api_version='v2', client_args=None, auth_enpoint='authenticate'):
         """Creates a new GCivicInfo instance, with option parameters for
         authentication and so forth
@@ -54,6 +55,11 @@ class GCivicInfo(EndpointsMixin, object):
         self.app_secret = app_secret
         self.oauth_token = oauth_token
         self.oauth_token_secret = oauth_token_secret
+
+        if oauth_version == 2:
+            self.#request a token url
+
+        self.oauth_version = oauth_version
 
         self.client_args - client_args or {}
         default_headers = {'User-Agent': 'GCivicInfo v' + __version__}
