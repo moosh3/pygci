@@ -38,3 +38,44 @@ $ python setup.py install
 ### Documentation
 
 You can check out the docs at https://pygci.readthedocs.io/en/latest
+
+#### Representatives
+
+params::
+    - levels (string):
+        A list of office levels to filter queryes by. Only offices
+        that serve at least one of these levels will be returned.
+        Divisions that don't contain a matching office will not be
+        returned.
+
+        - administrativeArea1
+        - administrativeArea2
+        - country
+        - international
+        - locality
+        - regional
+        - special
+        - subLocality1
+        - subLocality2
+
+    - roles (string):
+        A list of office roles to filter queries by. Only offices
+        fufilling one of these roles will be returned. Divisions that
+        don't contain a matching office will not be returned.
+
+        - deputyHeadOfGovernment
+        - executiveCouncil
+        - governmentOfficer
+        - headOfGovernment
+        - headOfState
+        - highestCourtJudge
+        - judge
+        - legislatorLowerBody
+        - legislatorUpperBody
+        - schoolBoard
+        - specialPurposeOfficer
+
+#### Elections
+
+A list of election IDs can be obtained at:
+https://www.googleapis.com/civicinfo/v2/elections

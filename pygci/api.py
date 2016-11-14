@@ -89,11 +89,6 @@ class GCivicInfo(EndpointsMixin, object):
         request_args = {}
         if method == 'get':
             request_args['params'] = params
-        else:
-            request_args.update({
-                'data': params,
-                'files': files,
-            })
         try:
             response = func(url, **request_args)
         except request.RequestException as e:
@@ -127,13 +122,13 @@ class GCivicInfo(EndpointsMixin, object):
 
     def get(self, endpoint, params=None, version='v2'):
         """Shortcut for GET requests"""
-        return self.request(endpoint, params=params, version=version)
-
-    def post(self, endpoint, params=None, version='v2'):
-        """Shortcut for POST requests"""
-        return self.request(endpoint, 'POST', params=params, version=version)
+        # Using requests package until custom request and _request method are complete
+        return self.requests.get(endpoint, params=params, version=version)
 
     """Authentication setup goes here"""
+
+    def encode_address_url(api_url, **params):
+
 
     @staticmethod
     def construct_api_url(api_url, **params):
