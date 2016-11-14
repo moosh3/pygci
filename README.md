@@ -37,4 +37,4 @@ $ python setup.py install
 
 ### Documentation
 
-You can check out the docs at [https://pygci.readthedocs.io/en/latest]
+You can check out the docs at https://pygci.readthedocs.io/en/latest

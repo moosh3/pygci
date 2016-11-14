@@ -29,6 +29,9 @@ class EndpointsMixin(object):
     def get_representative_by_address(self, **params):
         """Looks up political geography and representative
         information for a single address
+
+        params:
+            - address, includeOffices, levels, roles
         """
 
     def get_representative_by_division(self, **params):
