@@ -13,8 +13,7 @@ class GCivicInfoEndpointsTestCase(unittest.TestCase):
             'allow_redirects': False
         }
 
-        self.api = GCivicInfo(app_key, app_secret,
-                              oauth_token, oauth_token_secret,
+        self.api = GCivicInfo(api_key, oauth_token, oauth_token_secret,
                               client_args=client_args)
 
     # Elections

@@ -1,5 +1,5 @@
 """
-GCivicInfo.Client
+pygci.api
 
 API Client for access to GCivicInfo API calls,
 GCI authentication, and other methods needed when
@@ -19,14 +19,13 @@ from .endpoints import EndpointsMixin
 from .exceptions import
     GCivicInfoError,
     GCivicAuthError,
-    GCivicRateLimitError
 from .helpers import _transparent_params
 
 
 class GCivicInfo(EndpointsMixin, object):
-    def __init__(self, app_key=None, app_secret=None, oauth_token=None,
-                 oauth_token_secret=None, oauth_version=2, api_key=None,
-                 api_version='v2', client_args=None, auth_enpoint='authenticate'):
+    def __init__(self, api_key=None, oauth_token=None,
+                 oauth_token_secret=None, oauth_version=2, api_version='v2',
+                 client_args=None, auth_enpoint='authenticate'):
         """Creates a new GCivicInfo instance, with option parameters for
         authentication and so forth
 
@@ -51,8 +50,7 @@ class GCivicInfo(EndpointsMixin, object):
         self.api_version = api_version
         self.api_url = 'https://www.googleapis.com/civicinfo/%s/%s'
 
-        self.app_key = app_key
-        self.app_secret = app_secret
+        self.api_key = api_key
         self.oauth_token = oauth_token
         self.oauth_token_secret = oauth_token_secret
 
@@ -82,86 +80,4 @@ class GCivicInfo(EndpointsMixin, object):
         self.client.headers.update(self.client_args.pop('headers'))
 
     def __repr__(self):
-        return '<GCivicInfo: %s>' % (self.app_key)
-
-    def _request(self, url, method='GET', params=None, api_call=None):
-        """Internal request method"""
-        method = method.lower()
-        params = params or {}
-
-        func = getattr(self.client, method)
-        params, files = _transparent_params(params)
-
-        request_args = {}
-        if method == 'get':
-            request_args['params'] = params
-        try:
-            response = func(url, **request_args)
-        except request.RequestException as e:
-            raise GCivicInfoError(str(e))
-
-        try:
-            if response.status_code == 204:
-                content = response.content
-            else:
-                content = response.json()
-        except ValueError:
-            raise GCivicInfoError('Response was not valid JSON. \
-                                  Unable to decode.')
-
-        return content
-
-    def request(self, endpoint, method='GET', params=None, version='v2'):
-        """Return dict of response from GCI API"""
-        if endpoint.startswith('http://'):
-            raise GCivicInfoError('www.googleapis.com is restricted to SSL/TLS traffic.')
-
-        # In case the want to pass a full GCI URL
-        if endpoint.startswith('https://'):
-            url = endpoint
-        else:
-            url = '%s/%s' % (self.api_url % version, endpoint)
-
-        content = self._request(url, method=method, params=params, api_call=url)
-
-        return content
-
-    def get(self, endpoint, params=None, version='v2'):
-        """Shortcut for GET requests"""
-        # Using requests package until custom request and _request method are complete
-        return self.requests.get(endpoint, params=params, version=version)
-
-    """Authentication setup goes here"""
-
-
-    @staticmethod
-    def construct_api_url(api_url, **params):
-        """Creates GCI API url, encoded with parameters
-
-        :param api_url: URL of the GCI API endpoint you are attempting to construct
-        :param \*\*params: Parameters accepted by GCI for the specific endpoint
-        you are requesting
-        """
-        querystring = []
-        params, _ = _transparent_params(params or {})
-        params = requests.utils.to_key_val_list(params)
-        for (k, v) in params:
-            querystring.append(
-                '%s=%s' % (pygci.encode(k), quote_plus(pygci.encode(v)))
-            )
-        return '%s?%s' % (api_url, '&'.join(querystring))
-
-    @staticmethod
-    def unicode2utf8(text):
-        try:
-            if is_py2 and isinstance(text, str):
-                text = text.encode('utf-8')
-        except:
-            pass
-        return text
-
-    @staticmethod
-    def encode(text):
-        if is_py2 and isinstance(text, (str)):
-            return pygci.unicode2utf8(text)
-        return str(text)
+        return '<GCivicInfo: %s>' % (__version__)

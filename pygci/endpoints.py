@@ -5,13 +5,10 @@ A mixin for a GCivicInfo <GCivicInfo> instance.
 Params that need to be embedded in the API url just
 need to be passed as a keyboard argument.
 
-e.g. GCivicInfo.representative(address)
 """
 
 import os
 import warnings
-from io import BytesIO
-from time import sleep
 
 
 class EndpointsMixin(object):
