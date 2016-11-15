@@ -40,11 +40,6 @@ def request(self, endpoint, method='GET', params=None, version='v2'):
 
     return content
 
-def get(self, endpoint, params=None, version='v2'):
-    """Shortcut for GET requests"""
-    # Using requests package until custom request and _request method are complete
-    return self.requests.get(endpoint, params=params, version=version)
-
 """Authentication setup goes here"""
 
 
