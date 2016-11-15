@@ -19,7 +19,7 @@ class GCivicInfoAPITestCase(unittest.TestCase):
 
     def get_url(self, endpoint):
         """Convenience function for mapping from endpoint to URL"""
-        return '%s/%s' % (self.api.api_url % self.api.api_version, endpoint)
+        return '%s/%s?key=%s' % (self.api.api_url % self.api.api_version, endpoint, api_key)
 
     def register_response(self, url, body='{}', status=200,
                           content_type='application/json; charset=utf-8'):

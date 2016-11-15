@@ -26,7 +26,7 @@ from .helpers import _transparent_params
 class GCivicInfo(EndpointsMixin, object):
     def __init__(self, api_key=None, oauth_token=None,
                  oauth_token_secret=None, oauth_version=2, api_version='v2',
-                 client_args=None, auth_enpoint='authenticate'):
+                 headers=None, auth_enpoint='authenticate'):
         """Creates a new GCivicInfo instance, with option parameters for
         authentication and so forth
 
@@ -60,7 +60,7 @@ class GCivicInfo(EndpointsMixin, object):
 
         self.oauth_version = oauth_version
 
-        # requests HEADERS change
+        api_key = os.environ('API_KEY')
 
     def __repr__(self):
         return '<GCivicInfo: %s>' % (__version__)
@@ -74,9 +74,9 @@ class GCivicInfo(EndpointsMixin, object):
         if endpoint.startswith('https://'):
             url = endpoint
         else:
-            url = '%s/%s?key=%s' % (self.api_url % version, endpoint, api_key)
+            url = '%s/%s?key=' % (self.api_url % version, endpoint)
 
-        content = requests.get(url, params=params)
+        content = requests.get(url + api_key, params=params)
 
         if 'application/json' not in content.headers['content-type']:
             raise GCivicInfoError("Response was not valid Json")
