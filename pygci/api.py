@@ -17,9 +17,7 @@ from oauth2client import client
 
 from . import __version__
 from .endpoints import EndpointsMixin
-from .exceptions import
-    GCivicInfoError,
-    GCivicAuthError,
+from .exceptions import GCivicInfoError, GCivicAuthError,
 
 
 class GCivicInfo(EndpointsMixin, object):
