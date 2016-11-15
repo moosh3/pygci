@@ -12,7 +12,7 @@ else:
     address = raw_input("Voter's address: ")
     # For Python 3.x use: address = input("Voter's address: ")
 
-CivicInfo = GCivicInfo(api_key)
+CivicInfo = GCivicInfo(api_key='AIzaSyDjz3Y8DzW1s00kIuSFKk_zzo5YlUh314w')
 
 try:
     CivicInfo.get_representative_by_address(address=address)

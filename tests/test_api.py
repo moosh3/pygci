@@ -29,7 +29,7 @@ class GCivicInfoAPITestCase(unittest.TestCase):
     @responses.activate
     def test_requests_should_handle_full_endpoint(self):
         """Test that requests() accepts a full URL plus endpoint"""
-        url = 'https://wwww.googleapis.com/civicinfo/v2/elections
+        url = 'https://wwww.googleapis.com/civicinfo/v2/elections'
         self.register_response(responses.GET, url)
 
         self.requests.get(url)

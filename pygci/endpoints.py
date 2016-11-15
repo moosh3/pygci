@@ -17,7 +17,7 @@ class EndpointsMixin(object):
     def get_election_query(self, **params):
         """List of available election to query
         """
-        return self.requests.get('/elections', params=params)
+        return self.get('/elections', params=params)
 
     def get_voter_info_query(self, address, **params):
         """Looks up information relevant to a voter

@@ -14,5 +14,4 @@ from .api import GCivicInfo
 from .exceptions import (
     GCivicInfoError,
     GCivicAuthError,
-    GCivicRateLimitError
 )
