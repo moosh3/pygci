@@ -11,21 +11,8 @@ class GCivicInfoError(Exception):
     from pygci import GCivicInfo, GCivicAuthError, GCivicRateLimitError
 
     """
-    def __init__(self, msg, error_code=None, retry_after=None):
-        self.error_code = error_code
-
-        if error_code is not None and error_code in CIVIC_INFO_HTTP_STATUS_CODE:
-            msg: 'Google Civic Info API return a %s (%s), %s' % \
-                (error_code,
-                 CIVIC_INFO_HTTP_STATUS_CODE[error_code][0],
-                 msg)
-
-        super(GCivicInfoError, self).__init__(msg)
-
-    @property
-    def msg(self):
-        return self.args[0]
-
+    pass
+    
 class GCivicAuthError(Exception):
     """Raised when you attempt to access a protected resource and it
     fails due to an issue with your authentication
