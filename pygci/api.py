@@ -20,7 +20,6 @@ from .endpoints import EndpointsMixin
 from .exceptions import
     GCivicInfoError,
     GCivicAuthError,
-from .helpers import _transparent_params
 
 
 class GCivicInfo(EndpointsMixin, object):
@@ -45,7 +44,6 @@ class GCivicInfo(EndpointsMixin, object):
         :param api_version: (optional) Choose which GCI API version to
         use. Default: v2
 
-        :param client_args:
         :param auth_endpoint:
         """
         self.api_version = api_version

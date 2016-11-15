@@ -6,13 +6,6 @@ import time
 class GCivicInfoEndpointsTestCase(unittest.TestCase):
     def setUp(self):
 
-        client_args = {
-            'headers': {
-                'User-Agent': '__pygci__ Test'
-            },
-            'allow_redirects': False
-        }
-
         self.api = GCivicInfo(api_key, oauth_token, oauth_token_secret,
                               client_args=client_args)
 

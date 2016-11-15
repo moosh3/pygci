@@ -3,7 +3,7 @@ from pygci import GCivicInfo, GCivicInfoError
 # Optionally accept user data from the command line
 #
 # Usage: lookup_representative.py 62701
-
+import os
 import sys
 
 if len(sys.argv) >= 2:
@@ -12,7 +12,7 @@ else:
     address = raw_input("Voter's address: ")
     # For Python 3.x use: address = input("Voter's address: ")
 
-CivicInfo = GCivicInfo(API_KEY, OAUTH_TOKEN, OAUTH_TOKEN_SECRET)
+CivicInfo = GCivicInfo(api_key)
 
 try:
     CivicInfo.get_representative_by_address(address=address)
