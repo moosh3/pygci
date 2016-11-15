@@ -1,5 +1,7 @@
 # pygci
 
+[![PyPI version](https://badge.fury.io/py/pygci.svg)](https://badge.fury.io/py/pygci)
+
 ```pygci``` is a thin Python library allowing easy access to Google's Civic Information API.
 
 ### Features
