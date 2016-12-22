@@ -16,6 +16,6 @@ else:
 CivicInfo = GCivicInfo(api_key=API_KEY)
 
 try:
-    CivicInfo.get_representative_by_address(address=address)
+    CivicInfo.get_representative_by_address(params=address)
 except GCivicInfoError as e:
     print(e)

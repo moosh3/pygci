@@ -17,7 +17,7 @@ from .exceptions import GCivicInfoError
 class GCivicInfo(EndpointsMixin, object):
     def __init__(self, api_key=None, oauth_token=None,
                  oauth_token_secret=None, oauth_version=2,
-                 token_type='bearer', api_version='v2',
+                 access_token=None, token_type='bearer', api_version='v2',
                  client_args=None, auth_enpoint='authenticate'):
         """Creates a new GCivicInfo instance, with option parameters for
         authentication and so forth
@@ -40,11 +40,12 @@ class GCivicInfo(EndpointsMixin, object):
         :param auth_endpoint:
         """
         self.api_version = api_version
-        self.api_url = 'https://www.googleapis.com/civicinfo/%s/%s'
-
+        self.api_url = 'https://www.googleapis.com/civicinfo/{}/{}'
         self.api_key = api_key
+
         self.oauth_token = oauth_token
         self.oauth_token_secret = oauth_token_secret
+        self.access_token = access_token
 
         if self.oauth_token:
             oauth_version = 2
@@ -66,6 +67,8 @@ class GCivicInfo(EndpointsMixin, object):
             token = {'token_type': token_type,
                      'access_token': self.access_token}
             auth = OAuth2(self.app_key, token=token)
+        else:
+            auth = None
 
         self.client = requests.Session()
         self.client.auth = auth
@@ -135,8 +138,8 @@ class GCivicInfo(EndpointsMixin, object):
         if endpoint.startswith('https://'):
             url = endpoint
         else:
-            url = '%s/%s?key=' % (self.api_url % version, endpoint)
-
+            url = self.api_url.format(
+                version, endpoint) + params + '&key='
         content = self._request(url, method='GET', params=params)
 
         return content

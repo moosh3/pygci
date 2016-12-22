@@ -31,14 +31,15 @@ class EndpointsMixin(object):
             return self.get('/voterinfo', params=params)
 
     # Representatives
-    def get_representative_by_address(self, **params):
+    def get_representative_by_address(self, params):
         """Looks up political geography and representative
         information for a single address
 
         :param address: (optional) type=string
         :param includeOffices: (optional) type=boolean, default=True
         """
-        return self.get('/representatives', params=params)
+        address = ''
+        return self.get('/representatives?', params=address)
 
     def get_representative_by_division(self, ocdId, **params):
         """Looks up representative information for a single
