@@ -12,6 +12,8 @@ from requests_oauthlib import OAuth2
 from . import __version__
 from .endpoints import EndpointsMixin
 from .exceptions import GCivicInfoError
+from .compat import json, urlencode, parse_qsl, quote_plus, str, is_py2
+from .helpers import _transparent_params
 
 
 class GCivicInfo(EndpointsMixin, object):
@@ -147,3 +149,21 @@ class GCivicInfo(EndpointsMixin, object):
     def get(self, endpoint='GET', api_key=None, params=None, version='v2'):
         """Shortcut for GET requests"""
         return self.request(endpoint, params=params, version=version)
+
+    def construct_url(api_url, **params):
+        """Create url to be passed through
+        """
+        querystring = []
+        params, _ = _transparent_params(params or {})
+        params = requests.utils.to_key_val_list(params)
+        for (k, v) in params:
+            querystring.append(
+                '%s=%s' % (GCivicInfo.encode(k),quote_plus(GCivicInfo.encode(v)))
+            )
+        return '%s?%s' % (api_url, '&'.join(querystring))
+
+    @staticmethod
+    def encode(text):
+        if is_py2 and isinstance(text, (str)):
+            return GCivicInfo.unicode2utf8(text)
+        return str(text)
