@@ -5,23 +5,19 @@ API Client for access to GCivicInfo API calls,
 GCI authentication, and other methods needed when
 dealing with the GCI API
 """
-
-import warnings
-import re
-import os
-
 import requests
+from requests_oauthlib import OAuth2
 
-#from oauth2client import client
 
 from . import __version__
 from .endpoints import EndpointsMixin
-from .exceptions import GCivicInfoError, GCivicAuthError
+from .exceptions import GCivicInfoError
 
 
 class GCivicInfo(EndpointsMixin, object):
     def __init__(self, api_key=None, oauth_token=None,
-                 oauth_token_secret=None, oauth_version=2, api_version='v2',
+                 oauth_token_secret=None, oauth_version=2,
+                 token_type='bearer', api_version='v2',
                  client_args=None, auth_enpoint='authenticate'):
         """Creates a new GCivicInfo instance, with option parameters for
         authentication and so forth
@@ -50,11 +46,13 @@ class GCivicInfo(EndpointsMixin, object):
         self.oauth_token = oauth_token
         self.oauth_token_secret = oauth_token_secret
 
-        #if oauth_version == 2:
-            #request a token url
+        if self.oauth_token:
+            oauth_version = 2
+
+        self.oauth_version = oauth_version
 
         self.client_args = client_args or {}
-        default_headers = {'User-Agent': 'Twython v' + __version__}
+        default_headers = {'User-Agent': 'pygci v' + __version__}
         if 'headers' not in self.client_args:
             # If they didn't set any headers, set our defaults for them
             self.client_args['headers'] = default_headers
@@ -62,6 +60,12 @@ class GCivicInfo(EndpointsMixin, object):
             # If they set headers, but didn't include User-Agent.. set
             # it for them
             self.client_args['headers'].update(default_headers)
+
+        auth = None
+        if oauth_version == 2 and self.access_token:
+            token = {'token_type': token_type,
+                     'access_token': self.access_token}
+            auth = OAuth2(self.app_key, token=token)
 
         self.client = requests.Session()
         self.client.auth = auth
@@ -78,6 +82,8 @@ class GCivicInfo(EndpointsMixin, object):
         # Headers are always present, so we unconditionally pop them and merge
         # them into the session headers.
         self.client.headers.update(self.client_args.pop('headers'))
+
+        self._last_call = None
 
     def __repr__(self):
         return '<GCivicInfo: %s>' % (__version__)
@@ -101,6 +107,15 @@ class GCivicInfo(EndpointsMixin, object):
         except requests.RequestException as e:
             raise GCivicInfoError(str(e))
 
+        self._last_call = {
+                    'api_call': api_call,
+                    'api_error': None,
+                    'cookies': response.cookies,
+                    'headers': response.headers,
+                    'status_code': response.status_code,
+                    'url': response.url,
+                    'content': response.text,
+                }
         try:
             if response.status_code == 204:
                 content = response.content
@@ -114,7 +129,7 @@ class GCivicInfo(EndpointsMixin, object):
     def request(self, endpoint, params=None, version='v2'):
         """Let's do some nice python things with the requests packages"""
         if endpoint.startswith('http://'):
-            raise GCivicInfoError('www.googleapis.com is restricted to SSL/TLS traffic.')
+            raise GCivicInfoError('Restricted to SSL/TLS traffic.')
 
         # In case the want to pass a full GCI URL
         if endpoint.startswith('https://'):
@@ -126,7 +141,6 @@ class GCivicInfo(EndpointsMixin, object):
 
         return content
 
-    def get(self, endpoint, api_key=None, params=None, version='v2'):
+    def get(self, endpoint='GET', api_key=None, params=None, version='v2'):
         """Shortcut for GET requests"""
-        # Using requests package until custom request and _request method are complete
         return self.request(endpoint, params=params, version=version)

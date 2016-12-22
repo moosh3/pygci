@@ -6,9 +6,7 @@ Params that need to be embedded in the API url just
 need to be passed as a keyboard argument.
 
 """
-
-import os
-import warnings
+from .exceptions import GCivicInfoError
 
 
 class EndpointsMixin(object):

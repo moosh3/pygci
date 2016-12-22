@@ -13,6 +13,7 @@ class GCivicInfoError(Exception):
     """
     pass
 
+
 class GCivicAuthError(Exception):
     """Raised when you attempt to access a protected resource and it
     fails due to an issue with your authentication
